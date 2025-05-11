@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaVolt Hydro Power Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #034078;
+            --secondary-color: #1282A2;
+            --accent-color: #0CF25D;
+            --light-color: #FEFFFF;
+            --dark-color: #001F3F;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, #5CDB95 100%);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.1);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        p {
+            opacity: 0.9;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+
+        .water-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.08;
+        }
+
+        .wave {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%235CDB95" fill-opacity="1" d="M0,128L48,133.3C96,139,192,149,288,170.7C384,192,480,224,576,213.3C672,203,768,149,864,144C960,139,1056,181,1152,197.3C1248,213,1344,203,1392,197.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: wave 15s linear infinite;
+            background-size: 100% 100%;
+            bottom: 0;
+        }
+
+        .wave:nth-child(2) {
+            animation: wave-reverse 20s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes wave {
+            0% { background-position-x: 0%; }
+            100% { background-position-x: 100%; }
+        }
+
+        @keyframes wave-reverse {
+            0% { background-position-x: 100%; }
+            100% { background-position-x: 0%; }
+        }
+
+
+        nav {
+            background-color: rgba(5, 56, 107, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: var(--light-color);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-right: 1rem;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--light-color);
+            clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
+        }
+
+
+        .container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: "";
+            display: block;
+            width: 70%;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+
+        .project-info {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 4rem;
+        }
+
+        .project-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .project-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .display-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .display-area {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .display-area:hover {
+            transform: translateY(-5px);
+        }
+
+        .display-area h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .display-area h3 i {
+            margin-right: 1rem;
+            color: var(--accent-color);
+        }
+
+        .embed-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            border: 2px dashed var(--secondary-color);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(92, 219, 149, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .embed-container.active {
+            border: 2px solid var(--accent-color);
+        }
+
+        .embed-input {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .embed-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(92, 219, 149, 0.2);
+        }
+
+        .embed-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .embed-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .embed-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+            border-radius: 8px;
+        }
+
+
+        .team-section {
+            margin-bottom: 4rem;
+        }
+
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-image {
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .member-image:hover img {
+            transform: scale(1.1);
+        }
+
+        .member-image .upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 56, 107, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .member-image:hover .upload-overlay {
+            opacity: 1;
+        }
+
+        .upload-icon {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .member-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .member-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .member-info p {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: var(--primary-color);
+            clip-path: polygon(0 100%, 100% 0, 100% 100%);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo i {
+            margin-right: 1rem;
+        }
+
+        .footer-about p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .footer-links h3, .footer-contact h3 {
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-links h3::after, .footer-contact h3::after {
+            content: "";
+            display: block;
+            width: 50%;
+            height: 3px;
+            background: var(--accent-color);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links ul li a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .footer-contact p i {
+            margin-right: 1rem;
+            color: var(--accent-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+
+        @media (max-width: 1024px) {
+            .display-areas {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .team-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .project-info, .display-area {
+                padding: 1.5rem;
+            }
+            
+            .embed-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-bg">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-water"></i>
+                <h2>AQUA VOLT</h2>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#project">Overview</a></li>
+                <li><a href="#data">Dashboard</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AQUA VOLT</h1>
+            <p>The best Hydropower Station In North Sinai</p>
+            <p>Team Num.103</p>
+        </div>
+    </section>
+
+
+    <div class="container">
+        <section id="project" class="project-section">
+            <div class="section-title">
+                <h2>Project Overview</h2>
+            </div>
+            <div class="project-info">
+                <h3>Our Solution</h3>
+                <p>Our Aquavolt project represents a breakthrough in renewable energy technology. By creating a Pelton turbine, we generate clean electricity through a specially designed turbine system that maximizes energy extraction while minimizing environmental impact.</p>
+                <p>The prototype utilizes an Arduino-based monitoring system with current and voltage sensors to collect real-time data from the DC motor. This data helps us analyze efficiency, power output, and optimize the turbine design for various water flow conditions.</p>
+                <p>This dashboard provides real-time monitoring capabilities and documentation of our testing process, showcasing our innovative approach to sustainable energy generation.</p>
+            </div>
+        </section>
+
+        <section id="data" class="display-section">
+            <div class="section-title">
+                <h2>Project Dashboard</h2>
+            </div>
+            <div class="display-areas">
+                <div class="display-area">
+                    <h3><i class="fas fa-chart-line"></i> Live Data Dashboard</h3>
+                    <div class="embed-container" id="data-container">
+                        <input type="text" class="embed-input" id="data-url" placeholder="Enter your data dashboard URL here">
+                        <button class="embed-button" id="load-data">Load Dashboard</button>
+                        <iframe id="data-frame" class="embed-frame" title="Data Dashboard"></iframe>
+                    </div>
+                </div>
+
+                <div class="display-area">
+                    <h3><i class="fas fa-video"></i> Test Plan Video</h3>
+                    <div class="embed-container" id="video-container">
+                        <input type="text" class="embed-input" id="video-url" placeholder="Enter your video URL here (YouTube, etc.)">
+                        <button class="embed-button" id="load-video">Load Video</button>
+                        <iframe id="video-frame" class="embed-frame" title="Test Plan Video"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="team" class="team-section">
+            <div class="section-title">
+                <h2>Our Team</h2>
+            </div>
+            <div class="team-container">
+                <div class="team-member" id="member-1">
+                    <div class="member-image">
+                        <img id="member1-img" src="/api/placeholder/400/320" alt="3b3aty">
+                        <div class="upload-overlay" onclick="document.getElementById('upload-member1').click()">
+                            <i class="fas fa-camera upload-icon"></i>
+                        </div>
+                        <input type="file" id="upload-member1" style="display: none" accept="image/*">
+                    </div>
+                    <div class="member-info">
+                        <h3>Omar Ma7moud</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member" id="member-2">
+                    <div class="member-image">
+                        <img id="member2-img" src="/api/placeholder/400/320" alt="No2ta">
+                        <div class="upload-overlay" onclick="document.getElementById('upload-member2').click()">
+                            <i class="fas fa-camera upload-icon"></i>
+                        </div>
+                        <input type="file" id="upload-member2" style="display: none" accept="image/*">
+                    </div>
+                    <div class="member-info">
+                        <h3>Abdelrahman Ashraf</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member" id="member-3">
+                    <div class="member-image">
+                        <img id="member3-img" src="/api/placeholder/400/320" alt="Mohamed Naguib">
+                        <div class="upload-overlay" onclick="document.getElementById('upload-member3').click()">
+                            <i class="fas fa-camera upload-icon"></i>
+                        </div>
+                        <input type="file" id="upload-member3" style="display: none" accept="image/*">
+                    </div>
+                    <div class="member-info">
+                        <h3>Mohamed Naguib</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member" id="member-4">
+                    <div class="member-image">
+                        <img id="member4-img" src="/api/placeholder/400/320" alt="Mohamed Hossam">
+                        <div class="upload-overlay" onclick="document.getElementById('upload-member4').click()">
+                            <i class="fas fa-camera upload-icon"></i>
+                        </div>
+                        <input type="file" id="upload-member4" style="display: none" accept="image/*">
+                    </div>
+                    <div class="member-info">
+                        <h3>Mohamed Hossam</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="team-member" id="member-5">
+                    <div class="member-image">
+                        <img id="member5-img" src="/api/placeholder/400/320" alt="Shamezo">
+                        <div class="upload-overlay" onclick="document.getElementById('upload-member5').click()">
+                            <i class="fas fa-camera upload-icon"></i>
+                        </div>
+                        <input type="file" id="upload-member5" style="display: none" accept="image/*">
+                    </div>
+                    <div class="member-info">
+                        <h3>ELShamy</h3>
+                        <div class="social-links">
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-water"></i>
+                    <h3>Aqua Volt</h3>
+                </div>
+                <p>Our mission is to revolutionize renewable energy production through innovative hydro power solutions that are efficient, sustainable, and environmentally friendly.</p>
+            </div>
+
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#project">Project Overview</a></li>
+                    <li><a href="#data">Dashboard</a></li>
+                    <li><a href="#team">Team Members</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> omarkhalaf3070@gmail.com</p>
+                <p><i class="fas fa-phone"></i> 01123055184</p>
+                <p><i class="fas fa-map-marker-alt"></i> STEM High School for Boys - 6th of October</p>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>AquaVoltProject By Team 103 &copy; 2025 | Sustainable Energy Solutions</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('load-data').addEventListener('click', function() {
+            const url = document.getElementById('data-url').value.trim();
+            if (url) {
+                document.getElementById('data-frame').src = url;
+                document.getElementById('data-frame').style.display = 'block';
+                document.getElementById('data-container').classList.add('active');
+                document.getElementById('data-url').style.display = 'none';
+                document.getElementById('load-data').style.display = 'none';
+            } else {
+                alert('Please enter a valid URL for the data dashboard.');
+            }
+        });
+
+        document.getElementById('load-video').addEventListener('click', function() {
+            let url = document.getElementById('video-url').value.trim();
+            
+            if (url) {
+                if (url.includes('youtube.com/watch?v=')) {
+                    const videoId = url.split('v=')[1].split('&')[0];
+                    url = `https://www.youtube.com/embed/${videoId}`;
+                } else if (url.includes('youtu.be/')) {
+                    const videoId = url.split('youtu.be/')[1];
+                    url = `https://www.youtube.com/embed/${videoId}`;
+                }
+                
+                document.getElementById('video-frame').src = url;
+                document.getElementById('video-frame').style.display = 'block';
+                document.getElementById('video-container').classList.add('active');
+                document.getElementById('video-url').style.display = 'none';
+                document.getElementById('load-video').style.display = 'none';
+            } else {
+                alert('Please enter a valid URL for the video.');
+            }
+        });
+
+        document.getElementById('data-container').addEventListener('dblclick', function() {
+            if (confirm('Reset data dashboard embed?')) {
+                document.getElementById('data-frame').style.display = 'none';
+                document.getElementById('data-frame').src = '';
+                document.getElementById('data-url').style.display = 'block';
+                document.getElementById('load-data').style.display = 'block';
+                document.getElementById('data-container').classList.remove('active');
+            }
+        });
+
+        document.getElementById('video-container').addEventListener('dblclick', function() {
+            if (confirm('Reset video embed?')) {
+                document.getElementById('video-frame').style.display = 'none';
+                document.getElementById('video-frame').src = '';
+                document.getElementById('video-url').style.display = 'block';
+                document.getElementById('load-video').style.display = 'block';
+                document.getElementById('video-container').classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    const imgId = this.id.replace('upload-', '') + '-img';
+                    
+                    reader.onload = function(event) {
+                        document.getElementById(imgId).src = event.target.result;
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
